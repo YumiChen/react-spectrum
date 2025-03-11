@@ -748,4 +748,97 @@ describe('GridList', () => {
       });
     });
   });
+
+  describe('shouldSelectOnPressUp', () => {
+
+    it('should select an item on pressing down when shouldSelectOnPressUp is not provided', async () => {
+      let onAction = jest.fn();
+      let onSelectionChange = jest.fn();
+      let {getAllByRole} = render(
+        <GridList aria-label="listView" onSelectionChange={onSelectionChange} onAction={onAction}>
+          <GridListItem id="cat">Cat</GridListItem>
+          <GridListItem id="dog">Dog</GridListItem>
+        </GridList>
+      );
+      let items = getAllByRole('row');
+      fireEvent.pointerDown(items[0]);
+      expect(onAction).toHaveBeenCalledWith('cat');
+      expect(onSelectionChange).toHaveBeenCalledTimes(1);
+    });
+
+    it('should not select an item on press up when shouldSelectOnPressUp is not provided', () => {
+      let onAction = jest.fn();
+      let onSelectionChange = jest.fn();
+      let {getAllByRole} = render(
+        <GridList aria-label="listView" onSelectionChange={onSelectionChange} onAction={onAction}>
+          <GridListItem id="cat">Cat</GridListItem>
+          <GridListItem id="dog">Dog</GridListItem>
+        </GridList>
+      );
+      let items = getAllByRole('row');
+      fireEvent.pointerUp(items[0]);
+      expect(onAction).not.toBeCalled();
+      expect(onSelectionChange).not.toBeCalled();
+    });
+
+    it('should select an item on pressing down when shouldSelectOnPressUp is false', async () => {
+      let onAction = jest.fn();
+      let onSelectionChange = jest.fn();
+      let {getAllByRole} = render(
+        <GridList aria-label="listView" onSelectionChange={onSelectionChange} onAction={onAction} shouldSelectOnPressUp={false}>
+          <GridListItem id="cat">Cat</GridListItem>
+          <GridListItem id="dog">Dog</GridListItem>
+        </GridList>
+      );
+      let items = getAllByRole('row');
+      fireEvent.pointerDown(items[0]);
+      expect(onAction).toHaveBeenCalledWith('cat');
+      expect(onSelectionChange).toHaveBeenCalledTimes(1);
+    });
+
+    it('should not select an item on press up when shouldSelectOnPressUp is false', () => {
+      let onAction = jest.fn();
+      let onSelectionChange = jest.fn();
+      let {getAllByRole} = render(
+        <GridList aria-label="listView" onSelectionChange={onSelectionChange} onAction={onAction} shouldSelectOnPressUp={false}>
+          <GridListItem id="cat">Cat</GridListItem>
+          <GridListItem id="dog">Dog</GridListItem>
+        </GridList>
+      );
+      let items = getAllByRole('row');
+      fireEvent.pointerUp(items[0]);
+      expect(onAction).not.toBeCalled();
+      expect(onSelectionChange).not.toBeCalled();
+    });
+
+    it('should not select an item on press down when shouldSelectOnPressUp is true', () => {
+      let onAction = jest.fn();
+      let onSelectionChange = jest.fn();
+      let {getAllByRole} = render(
+        <GridList aria-label="listView" onSelectionChange={onSelectionChange} onAction={onAction} shouldSelectOnPressUp={true}>
+          <GridListItem id="cat">Cat</GridListItem>
+          <GridListItem id="dog">Dog</GridListItem>
+        </GridList>
+      );
+      let items = getAllByRole('row');
+      fireEvent.pointerDown(items[0]);
+      expect(onAction).not.toBeCalled();
+      expect(onSelectionChange).not.toBeCalled();
+    });
+
+    it('should select an item on press up when shouldSelectOnPressUp is true', () => {
+      let onAction = jest.fn();
+      let onSelectionChange = jest.fn();
+      let {getAllByRole} = render(
+        <GridList aria-label="listView" onSelectionChange={onSelectionChange} onAction={onAction} shouldSelectOnPressUp={true}>
+          <GridListItem id="cat">Cat</GridListItem>
+          <GridListItem id="dog">Dog</GridListItem>
+        </GridList>
+      );
+      let items = getAllByRole('row');
+      fireEvent.pointerUp(items[0]);
+      expect(onAction).toHaveBeenCalledWith('cat');
+      expect(onSelectionChange).toHaveBeenCalledTimes(1);
+    });
+  });
 });
