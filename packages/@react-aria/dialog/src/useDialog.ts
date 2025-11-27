@@ -30,6 +30,9 @@ export interface DialogAria {
  * A dialog is an overlay shown above other content in an application.
  */
 export function useDialog(props: AriaDialogProps, ref: RefObject<FocusableElement | null>): DialogAria {
+  if (process.env.NODE_ENV !== 'production' && (props as any).isOpen != null) {
+    console.warn('useDialog is not intended to be used with a trigger. Did you mean to use useOverlayTrigger? See https://github.com/adobe/react-spectrum/issues/5402');
+  }
   let {
     role = 'dialog'
   } = props;

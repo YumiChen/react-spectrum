@@ -49,4 +49,11 @@ describe('useDialog', function () {
     let input = res.getByTestId('input');
     expect(document.activeElement).toBe(input);
   });
+
+  it('should warn if isOpen is passed', () => {
+    let spy = jest.spyOn(console, 'warn').mockImplementation(() => {});
+    render(<Example isOpen />);
+    expect(spy).toHaveBeenCalledWith('useDialog is not intended to be used with a trigger. Did you mean to use useOverlayTrigger? See https://github.com/adobe/react-spectrum/issues/5402');
+    spy.mockRestore();
+  });
 });
