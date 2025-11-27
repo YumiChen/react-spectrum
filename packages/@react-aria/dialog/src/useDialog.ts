@@ -14,7 +14,8 @@ import {AriaDialogProps} from '@react-types/dialog';
 import {DOMAttributes, FocusableElement, RefObject} from '@react-types/shared';
 import {filterDOMProps, useSlotId} from '@react-aria/utils';
 import {focusSafely} from '@react-aria/interactions';
-import {useEffect, useRef} from 'react';
+import {OverlayContext} from '@react-aria/overlays/src/context';
+import {useContext, useEffect, useRef} from 'react';
 import {useOverlayFocusContain} from '@react-aria/overlays';
 
 export interface DialogAria {
@@ -30,9 +31,13 @@ export interface DialogAria {
  * A dialog is an overlay shown above other content in an application.
  */
 export function useDialog(props: AriaDialogProps, ref: RefObject<FocusableElement | null>): DialogAria {
-  if (process.env.NODE_ENV !== 'production' && (props as any).isOpen != null) {
-    console.warn('useDialog is not intended to be used with a trigger. Did you mean to use useOverlayTrigger? See https://github.com/adobe/react-spectrum/issues/5402');
+  let overlayContext = useContext(OverlayContext);
+  // eslint-disable-next-line no-warning-comments
+  // @ts-ignore
+  if (process.env.NODE_ENV !== 'production' && (props as any).isOpen != null && !overlayContext) {
+    console.warn('useDialog is not intended to be used with a trigger. When a dialog is dismissable, it should be wrapped in a <Modal> or <Popover> from @react-spectrum/overlays. See https://github.com/adobe/react-spectrum/issues/5402');
   }
+
   let {
     role = 'dialog'
   } = props;

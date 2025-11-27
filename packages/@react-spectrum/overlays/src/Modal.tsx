@@ -22,6 +22,8 @@ import React, {ForwardedRef, forwardRef, ReactNode, useRef} from 'react';
 import {Underlay} from './Underlay';
 import {useObjectRef, useViewportSize} from '@react-aria/utils';
 
+import {OverlayContext} from '@react-aria/overlays/src/context';
+
 interface ModalProps extends AriaModalOverlayProps, StyleProps, Omit<OverlayProps, 'nodeRef' | 'shouldContainFocus'> {
   children: ReactNode,
   state: OverlayTriggerState,
@@ -101,7 +103,7 @@ let ModalWrapper = forwardRef(function (props: ModalWrapperProps, ref: Forwarded
           ref={objRef}
           className={modalClassName}
           data-testid="modal">
-          {children}
+          <OverlayContext.Provider value={{}}>{children}</OverlayContext.Provider>
         </div>
       </div>
     </div>

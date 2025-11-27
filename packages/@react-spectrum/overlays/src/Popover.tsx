@@ -18,6 +18,7 @@ import {mergeProps, useLayoutEffect, useObjectRef} from '@react-aria/utils';
 import {Overlay} from './Overlay';
 import {OverlayTriggerState} from '@react-stately/overlays';
 import overrideStyles from './overlays.css';
+import {OverlayContext} from '@react-aria/overlays/src/context';
 import React, {ForwardedRef, forwardRef, ReactNode, useRef, useState} from 'react';
 import styles from '@adobe/spectrum-css-temp/components/popover/vars.css';
 import {Underlay} from './Underlay';
@@ -151,7 +152,7 @@ const PopoverWrapper = forwardRef((props: PopoverWrapperProps, ref: ForwardedRef
         role="presentation"
         data-testid="popover">
         {(!isNonModal || enableBothDismissButtons) && <DismissButton onDismiss={onDismissButtonPress} />}
-        {children}
+        <OverlayContext.Provider value={{}}>{children}</OverlayContext.Provider>
         {hideArrow ? null : (
           <Arrow
             arrowProps={arrowProps}

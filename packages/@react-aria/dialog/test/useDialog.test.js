@@ -10,6 +10,7 @@
  * governing permissions and limitations under the License.
  */
 
+import {OverlayContext} from '@react-aria/overlays/src/context';
 import React, {useRef} from 'react';
 import {render} from '@react-spectrum/test-utils-internal';
 import {useDialog} from '../';
@@ -50,10 +51,21 @@ describe('useDialog', function () {
     expect(document.activeElement).toBe(input);
   });
 
-  it('should warn if isOpen is passed', () => {
+  it('should warn if isOpen is passed without an overlay context', () => {
     let spy = jest.spyOn(console, 'warn').mockImplementation(() => {});
     render(<Example isOpen />);
-    expect(spy).toHaveBeenCalledWith('useDialog is not intended to be used with a trigger. Did you mean to use useOverlayTrigger? See https://github.com/adobe/react-spectrum/issues/5402');
+    expect(spy).toHaveBeenCalledWith('useDialog is not intended to be used with a trigger. When a dialog is dismissable, it should be wrapped in a <Modal> or <Popover> from @react-spectrum/overlays. See https://github.com/adobe/react-spectrum/issues/5402');
+    spy.mockRestore();
+  });
+
+  it('should not warn if isOpen is passed with an overlay context', () => {
+    let spy = jest.spyOn(console, 'warn').mockImplementation(() => {});
+    render(
+      <OverlayContext.Provider value={{}}>
+        <Example isOpen />
+      </OverlayContext.Provider>
+    );
+    expect(spy).not.toHaveBeenCalled();
     spy.mockRestore();
   });
 });
