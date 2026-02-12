@@ -161,6 +161,11 @@ const LINK_CLICKED = Symbol('linkClicked');
 const STYLE_ID = 'react-aria-pressable-style';
 const PRESSABLE_ATTRIBUTE = 'data-react-aria-pressable';
 
+function getNonce() {
+  let meta = document.querySelector('meta[property="csp-nonce"]');
+  return meta?.nonce || meta?.content || globalThis['__webpack_nonce__'];
+}
+
 /**
  * Handles press interactions across mouse, touch, keyboard, and screen readers.
  * It normalizes behavior across browsers and platforms, and handles many nuances
@@ -874,6 +879,10 @@ export function usePress(props: PressHookProps): PressResult {
 
     const style = ownerDocument.createElement('style');
     style.id = STYLE_ID;
+    const nonce = getNonce();
+    if (nonce) {
+      style.nonce = nonce;
+    }
     // touchAction: 'manipulation' is supposed to be equivalent, but in
     // Safari it causes onPointerCancel not to fire on scroll.
     // https://bugs.webkit.org/show_bug.cgi?id=240917
